@@ -40,3 +40,15 @@ def test_stats(ab_api_client):
 
     with pact:
         assert ab_api_client.get_stats() == get_generated_values(schema.STATS)
+
+
+def test_get_subscription(ab_api_client):
+    (
+        pact.given('Subscription 1 exists')
+        .upon_receiving('a request for Billing Price Periods of Subscription 1')
+        .with_request('get', '/subscriptions/1/')
+        .will_respond_with(200, body=schema.SUBSCRIPTION)
+    )
+
+    with pact:
+        assert ab_api_client.get_subscription(1) == get_generated_values(schema.SUBSCRIPTION)

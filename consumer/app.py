@@ -18,3 +18,7 @@ class AdvancedBillingAPIClient:
     def get_stats(self):
         """Query for Site stats."""
         return self.get_json('/stats.json')
+
+    def get_subscription(self, subscription_id: int) -> dict:
+        """Query for a Subscription."""
+        return self.get_json(f'/subscriptions/{subscription_id}/')

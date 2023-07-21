@@ -1,4 +1,4 @@
-from pact import Format, Like, Term
+from pact import EachLike, Format, Like, Term
 
 
 DECIMAL_REGEX = r'(\d+)(\.\d+)?'
@@ -23,4 +23,42 @@ STATS = {
         'revenue_this_month': Term(DOLLAR_REGEX, '$16,491.20'),
         'revenue_this_year': Term(DOLLAR_REGEX, '$142,140.69'),
     },
+}
+
+
+SUBSCRIPTION = {
+    'id': Like(1),
+    'item_id': Like(1),
+    'item_type': Like('Product'),
+    'site_id': Like(1),
+    'subscription_id': Like(1),
+    'period_range_start': Format().date,
+    'period_range_end': Format().date,
+    'currency': Like('USD'),
+    'total_amount': Term(DECIMAL_REGEX, '1.00'),
+    'archived_at': None,
+    'created_at': Format().iso_datetime,
+    'updated_at': Format().iso_datetime,
+    'line_items': EachLike(
+        {
+            'uid': Term(r'li_\w+', 'li_b5m59532v57x9'),
+            'billing_price_period_id': Like(1),
+            'billing_schedule_item_id': Like(1),
+            'price_point_id': Like(1),
+            'item_id': Like(1),
+            'item_type': 'Product',
+            'description': Like('06/20/2023 - 07/20/2023'),
+            'item_description': Like('Standard Plan'),
+            'period_range_start': Format().date,
+            'period_range_end': Format().date,
+            'quantity': Term(DECIMAL_REGEX, '1.00'),
+            'title': Like('Standard Plan'),
+            'total_amount': Term(DECIMAL_REGEX, '1.00'),
+            'unit_name': Like('each'),
+            'unit_price': Term(DECIMAL_REGEX, '1.00'),
+            'archived_at': None,
+            'created_at': Format().iso_datetime,
+            'updated_at': Format().iso_datetime,
+        }
+    ),
 }
