@@ -11,3 +11,5 @@ Instructions
    - Command is `pact-verifier --provider-base-url=http://localhost:5000 --pact-url=http://localhost:9292/pacts/provider/AdvancedBilling/consumer/MaxioCore/latest`
    - Add `-a $(git rev-parse --short HEAD) -r` to publish verification results to broker
 6. Check out `add bpp to consumer`. Regenerate pacts. Verify that provider fails now.
+7. Check out `add test setup to provider`. Add
+   `--provider-states-setup-url=http://localhost:5000/provider_states_setup/` to `pact-verifier` incantation. Verify that the provider succeeds now.

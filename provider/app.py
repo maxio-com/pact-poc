@@ -1,8 +1,8 @@
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from dataclasses import dataclass
 from decimal import Decimal
 
-from flask import abort, Flask, jsonify
+from flask import abort, Flask, jsonify, request
 from flask.json.provider import DefaultJSONProvider
 
 
@@ -92,6 +92,55 @@ def get_subscription_bpp(subscription_id):
         return abort(404)
 
     return jsonify(subscription)
+
+
+# if environment is test: ...
+@app.route('/provider_states_setup/', methods=['POST'])
+def provider_states_setup():
+    assert request.json
+    match request.json.get('state'):
+        case 'Subscription 1 exists':
+            mock_subscription_with_id(1)
+    return jsonify({})
+
+
+def mock_subscription_with_id(subscription_id: int):
+    SUBSCRIPTION_REPOSITORY[subscription_id] = Subscription(
+        id=subscription_id,
+        item_id=5502833,
+        item_type='Product',
+        site_id=75678,
+        subscription_id=65939329,
+        period_range_start=date(2023, 6, 20),
+        period_range_end=date(2023, 7, 20),
+        currency='USD',
+        total_amount=Decimal('40.0'),
+        archived_at=None,
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc),
+        line_items=[
+            LineItem(
+                uid='li_b5m59532v57x9',
+                billing_price_period_id=12,
+                billing_schedule_item_id=50,
+                price_point_id=1269314,
+                item_id=5502833,
+                item_type='Product',
+                description='06/20/2023 - 07/20/2023',
+                item_description='Standard Plan',
+                period_range_start=date(2023, 6, 20),
+                period_range_end=date(2023, 7, 20),
+                quantity=Decimal('1.0'),
+                title='Standard Plan',
+                total_amount=Decimal('10.0'),
+                unit_name='each',
+                unit_price=Decimal('10.0'),
+                archived_at=None,
+                created_at=datetime.now(timezone.utc),
+                updated_at=datetime.now(timezone.utc),
+            )
+        ]
+    )
 
 
 if __name__ == '__main__':
