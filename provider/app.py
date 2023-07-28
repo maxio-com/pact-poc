@@ -2,7 +2,7 @@ from datetime import date, datetime, timezone
 from dataclasses import dataclass
 from decimal import Decimal
 
-from flask import abort, Flask, jsonify, request
+from flask import abort, Flask, json, jsonify, request
 from flask.json.provider import DefaultJSONProvider
 
 
@@ -105,7 +105,7 @@ def provider_states_setup():
 
 
 def mock_subscription_with_id(subscription_id: int):
-    SUBSCRIPTION_REPOSITORY[subscription_id] = Subscription(
+    subscription = Subscription(
         id=subscription_id,
         item_id=5502833,
         item_type='Product',
@@ -141,6 +141,17 @@ def mock_subscription_with_id(subscription_id: int):
             )
         ]
     )
+    SUBSCRIPTION_REPOSITORY[subscription_id] = subscription
+    return subscription
+
+
+def emit_subscription_create_message(subscription):
+    with app.app_context():
+        return {
+            'event': 'subscription_created',
+            # Here you would use some actual serializer, but this is easier
+            'data': json.loads(json.dumps(subscription)),
+        }
 
 
 if __name__ == '__main__':

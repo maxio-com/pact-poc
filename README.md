@@ -13,3 +13,8 @@ Instructions
 6. Check out `add bpp to consumer`. Regenerate pacts. Verify that provider fails now.
 7. Check out `add test setup to provider`. Add
    `--provider-states-setup-url=http://localhost:5000/provider_states_setup/` to `pact-verifier` incantation. Verify that the provider succeeds now.
+8. Check out `add async messaging contract`. Run `pytest test_messages.py` in `./consumer`. Publish `maxiocoreasync-advancedbillingasync.json`. Provider verification now handled by running `pytest` in `./provider`.
+   - Note that here it _could_ be nice to have both async message and REST contracts labeled by same consumer / provider
+     pairs. This is possible with newer Pact contract schema, v4. However, this new schema not yet supported by
+     pact-broker (for UI) or python SDK (for verification). First problem can throw $ at - commercial pact-flow displays
+     v4 contracts. Second problem can throw hours at - we can submit PRs to pact python SDK to support v4 specification.

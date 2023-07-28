@@ -22,3 +22,12 @@ class AdvancedBillingAPIClient:
     def get_subscription(self, subscription_id: int) -> dict:
         """Query for a Subscription."""
         return self.get_json(f'/subscriptions/{subscription_id}/')
+
+
+class AdvancedBillingMessageHandler:
+    @staticmethod
+    def handle(event):
+        match event:
+            case {'event': 'subscription_created', 'data': data}:
+                # Persist the Subscription to the database, perhaps ...
+                return data['id']  # ... and return its ID.

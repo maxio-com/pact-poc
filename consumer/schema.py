@@ -62,3 +62,8 @@ SUBSCRIPTION = {
         }
     ),
 }
+
+SUBSCRIPTION_CREATED_MESSAGE = {
+    'event': 'subscription_created',
+    'data': Like(SUBSCRIPTION),
+}
